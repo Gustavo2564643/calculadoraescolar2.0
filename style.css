@@ -1,0 +1,96 @@
+body {
+  background-color: #111;
+  color: #0ff;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  padding: 20px;
+}
+
+h1 {
+  font-size: 2em;
+  color: #0ff;
+}
+
+#titulo-digitado::after {
+  content: "|";
+  animation: piscarCursor 1s infinite;
+  margin-left: 5px;
+  color: #0ff;
+}
+
+@keyframes piscarCursor {
+  0%, 50% { opacity: 1; }
+  50.01%, 100% { opacity: 0; }
+}
+
+input, button {
+  margin: 10px;
+  padding: 10px;
+  font-size: 1em;
+  border: none;
+  border-radius: 5px;
+  outline: none;
+}
+
+input[type="number"] {
+  width: 80px;
+  background: #222;
+  color: #0ff;
+}
+
+input[type="number"]::-webkit-inner-spin-button {
+  appearance: none;
+}
+
+button {
+  background-color: #0ff;
+  color: #000;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  background-color: #0cc;
+}
+
+.resultado {
+  margin-top: 20px;
+  font-size: 1.4em;
+  transition: 0.3s;
+}
+
+.aprovado { color: #00ff00; text-shadow: 0 0 10px #00ff00; }
+.recuperacao { color: #ffff00; text-shadow: 0 0 10px #ffff00; }
+.reprovado { color: #ff0000; text-shadow: 0 0 10px #ff0000; }
+
+.grupo-notas {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+@media (max-width: 600px) {
+  body {
+    padding: 10px;
+  }
+
+  input[type="number"] {
+    width: 70px;
+    font-size: 1.2em;
+  }
+
+  button {
+    width: 90%;
+    max-width: 300px;
+    margin-top: 10px;
+  }
+}
+
+#limparTudo {
+  background-color: #f00;
+  color: #fff;
+}
+#limparTudo:hover {
+  background-color: #c00;
+}
