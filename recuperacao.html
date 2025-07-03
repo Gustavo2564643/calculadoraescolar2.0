@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<title>Simulador de Recuperação Simplificado</title>
+<style>
+  body {
+    background-color: #111;
+    color: #0ff;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 20px;
+  }
+  input, button {
+    margin: 8px;
+    padding: 10px;
+    font-size: 1em;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+    background: #222;
+    color: #0ff;
+  }
+  button {
+    background-color: #0ff;
+    color: #000;
+    cursor: pointer;
+  }
+  button:hover {
+    background-color: #0cc;
+  }
+  .resultado {
+    margin-top: 20px;
+    font-size: 1.3em;
+  }
+</style>
+</head>
+<body>
+
+<h1>Simulador de Recuperação Simplificado</h1>
+
+<label for="mediaDesejada">Média mínima desejada:</label><br/>
+<input type="number" id="mediaDesejada" value="7" min="1" max="10" step="0.01" /><br/>
+
+<label for="mediaAtual">Sua média atual (deve ser menor que a média mínima):</label><br/>
+<input type="number" id="mediaAtual" placeholder="Ex: 5.2" step="0.01" /><br/>
+
+<button onclick="calcularRecuperacao()">Calcular</button>
+<button onclick="limparCampos()">Limpar</button>
+
+<div class="resultado" id="resultadoSimulacao"></div>
+
+<script>
+  const mediaDesejadaInput = document.getElementById('mediaDesejada');
+  const mediaAtualInput = document.getElementById('mediaAtual');
+  const resultado = document.getElementById('resultadoSimulacao');
+  let alertaMostrado = false;
+
+  function corrigirMediaAtual() {
+    const mediaDesejada = parseFloat(mediaDesejadaInput.value);
+    let mediaAtual = parseFloat(mediaAtualInput.value);
+    if (isNaN(mediaDesejada) || isNaN(mediaAtual)) {
+      alertaMostrado = false;
+      return;
+    }
+    const maxPermitido = mediaDesejada - 0.01;
+    if (mediaAtual >= mediaDesejada) {
+      mediaAtualInput.value = maxPermitido.toFixed(2);
+      if (!alertaMostrado) {
+        alert(`A média atual deve ser menor que a média mínima (${mediaDesejada}).`);
+        alertaMostrado = true;
+      }
+    } else {
+      alertaMostrado = false;
+    }
+  }
+
+  mediaDesejadaInput.addEventListener('input', () => {
+    const mediaDesejada = parseFloat(mediaDesejadaInput.value);
+    if (!isNaN(mediaDesejada)) {
+      mediaAtualInput.max = (mediaDesejada - 0.01).toFixed(2);
+      if (parseFloat(mediaAtualInput.value) >= mediaDesejada) {
+        mediaAtualInput.value = '';
+        resultado.textContent = '';
+      }
+    } else {
+      mediaAtualInput.removeAttribute('max');
+    }
+    alertaMostrado = false;
+  });
+
+  mediaAtualInput.addEventListener('input', corrigirMediaAtual);
+  mediaAtualInput.addEventListener('change', corrigirMediaAtual);
+  mediaAtualInput.addEventListener('paste', () => setTimeout(corrigirMediaAtual, 10));
+
+  function calcularRecuperacao() {
+    const mediaDesejada = parseFloat(mediaDesejadaInput.value);
+    const mediaAtual = parseFloat(mediaAtualInput.value);
+
+    if (isNaN(mediaDesejada) || isNaN(mediaAtual)) {
+      resultado.textContent = "Preencha todos os campos corretamente.";
+      return;
+    }
+    if (mediaAtual >= mediaDesejada) {
+      alert("Sua média atual deve ser menor que a média mínima para usar a simulação.");
+      resultado.textContent = "";
+      return;
+    }
+    const pesoFinal = 1; // peso fixo
+    const notaNecessaria = ((mediaDesejada * (pesoFinal + 1)) - mediaAtual).toFixed(2);
+    if (notaNecessaria > 10) {
+      resultado.textContent = "Não é possível atingir a média mínima na recuperação.";
+    } else {
+      resultado.innerHTML = `Você precisa tirar <strong>${notaNecessaria}</strong> na prova de recuperação para atingir a média ${mediaDesejada}.`;
+    }
+  }
+
+  function limparCampos() {
+    mediaDesejadaInput.value = 7;
+    mediaAtualInput.value = '';
+    resultado.textContent = '';
+    alertaMostrado = false;
+  }
+</script>
+
+</body>
+</html>
